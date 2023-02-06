@@ -8,6 +8,7 @@ import {
   Button,
   TextInput,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 
 let productos = [
@@ -45,7 +46,17 @@ export default function App() {
 
   let ItemProducto = ({indice, producto}) => {
     return (
-      <View style={styles.itemProducto}>
+      <TouchableOpacity 
+        onPress={() => {
+          setTxtCodigo(convertirStringToInt(producto.codigo).toFixed(0));
+          setTxtNombre(producto.nombre);
+          setTxtCategoria(producto.categoria);
+          setTxtPrecioC((convertirStringToFloat(producto.precioCompra)).toFixed(2));
+          setTxtPrecioV((convertirStringToFloat(producto.precioVenta)).toFixed(2));
+          esNuevo = false;
+          indiceSeleccionado = indice;
+      }}>
+        <View style={styles.itemProducto}>
         <View style={styles.itemCodigo}>
           <Text style={styles.textoPrincipal}>{producto.codigo}</Text>
         </View>
@@ -57,7 +68,7 @@ export default function App() {
           <Text style={styles.itemPrecio}>{(convertirStringToFloat(producto.precioVenta)).toFixed(2)}</Text>
         </View>
         <View style={styles.itemBotones}>
-          <Button
+          {/* <Button
             title=" E "
             color="limegreen"
             onPress={() => {
@@ -69,7 +80,7 @@ export default function App() {
               esNuevo = false;
               indiceSeleccionado = indice;
             }}
-          />
+          /> */}
           <Button
             title=" X "
             color="orangered"
@@ -82,6 +93,7 @@ export default function App() {
           />
         </View>
       </View>
+      </TouchableOpacity>
     );
   };
 
@@ -294,7 +306,10 @@ const styles = StyleSheet.create({
     flex: 1.5,
     // backgroundColor: "teal",
     flexDirection: "row",
-    justifyContent: "space-between",
+    // con boton editar
+    // justifyContent: "space-between",
+    // sin boton editar, con TouchableOpacity
+    justifyContent: "space-evenly",
     marginHorizontal: 5,
   },
   // fin estilos componente----------------------
