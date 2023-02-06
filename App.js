@@ -87,7 +87,10 @@ export default function App() {
           <Button
             title=" X "
             color="orangered"
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+              indiceSeleccionado = indice;
+            }}
           />
         </View>
       </View>
@@ -186,8 +189,7 @@ export default function App() {
               <Button
                 title=" Eliminar "
                 color="orangered"
-                onPress={({indice}) => {
-                  indiceSeleccionado = indice;
+                onPress={({}) => {
                   productos.splice(indiceSeleccionado, 1);
                   Alert.alert("INFO", "Producto eliminada correctamente");
                   setNumElementos(productos.length);
