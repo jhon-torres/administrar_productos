@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 
 let productos = [
@@ -43,6 +44,8 @@ export default function App() {
   // variable con valor del PV con valor definido string para placeholder
   const [txtPrecioV, setTxtPrecioV] = useState("PRECIO DE VENTA");
   const [numElementos, setNumElementos] = useState(productos.length);
+  // variable de estado de visibilidad del modal al Eliminar
+  const [modalVisible, setModalVisible] = useState(false);
 
   let ItemProducto = ({indice, producto}) => {
     return (
@@ -84,12 +87,7 @@ export default function App() {
           <Button
             title=" X "
             color="orangered"
-            onPress={() => {
-              indiceSeleccionado = indice;
-              productos.splice(indiceSeleccionado, 1);
-              Alert.alert("INFO", "Producto eliminada correctamente");
-              setNumElementos(productos.length);
-            }}
+            onPress={() => setModalVisible(!modalVisible)}
           />
         </View>
       </View>
@@ -167,6 +165,39 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.titulo}>¡Atención!</Text>
+            <Text style={styles.modalText}>¿Deseas eliminar el producto?</Text>
+            <View style={styles.modalBotones}>
+              <Button
+                title=" Cancelar "
+                color="limegreen"
+                onPress={() => setModalVisible(!modalVisible) }
+              />
+              <Button
+                title=" Eliminar "
+                color="orangered"
+                onPress={({indice}) => {
+                  indiceSeleccionado = indice;
+                  productos.splice(indiceSeleccionado, 1);
+                  Alert.alert("INFO", "Producto eliminada correctamente");
+                  setNumElementos(productos.length);
+                  setModalVisible(!modalVisible);
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.areaCabecera}>
         <Text style={styles.titulo}>PRODUCTOS</Text>
         <ScrollView>
@@ -315,13 +346,13 @@ const styles = StyleSheet.create({
   // fin estilos componente----------------------
   // inicio areas----------------------
   areaCabecera: {
-    flex: 7,
+    flex: 8,
     // backgroundColor: "sandybrown",
     justifyContent: "center",
     marginVertical: 5,
   },
   areaContenido: {
-    flex: 7,
+    flex: 6,
     // backgroundColor: "thistle",
   },
   areaPie: {
@@ -336,4 +367,36 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   // fin areas----------------------
+  // inicio modal
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalBotones:{
+    flexDirection: "row",
+    gap: 5,
+    // justifyContent: "space-around",
+    justifyContent: "space-between",
+    // justifyContent: "space-evenly",
+  },
 });
